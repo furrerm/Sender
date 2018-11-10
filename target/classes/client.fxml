@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sender.clientController">
+   <children>
+      <Pane prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <ChoiceBox fx:id="graph" layoutX="77.0" layoutY="31.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="menge" layoutX="378.0" layoutY="31.0" prefWidth="150.0" />
+            <Button layoutX="254.0" layoutY="144.0" mnemonicParsing="false" onAction="#sendMsg" text="send Message" />
+            <Button layoutX="442.0" layoutY="325.0" mnemonicParsing="false" onAction="#closeClean" text="Close Connection" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
