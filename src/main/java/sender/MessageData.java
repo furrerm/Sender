@@ -90,4 +90,5 @@ public class MessageData implements Serializable {
     public void setKorbStand(int korbStand) {
         this.korbStand = korbStand;
     }
+
 }

@@ -15,6 +15,10 @@ import javax.naming.InitialContext;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class clientController implements Initializable{
@@ -39,36 +43,104 @@ public class clientController implements Initializable{
 
     private TextMessage txtMsg;
 
+    private List<Integer> randomNumbers;
+
     @FXML
     private void sendMsg(ActionEvent event){
+        randomNumbers = this.getRandomNumbers(100,24);
+
         try {   //Create and start connection
 
+
             MessageData data;
-            int i = 0;
 
-            while (i < (Integer)menge.getValue()) {
+            if(graph.getValue().toString().equals("1")) {
+                int i = 0;
 
-                //7) send message
-                data = new MessageData((Integer)i);
+                while (i < (Integer) menge.getValue()) {
+                    //7) send message
+                    data = new MessageData((Integer) i);
 
-                objMessage.setObject(data);
-                //txtMsg.setText("hallo vom Client" +i);
+                    objMessage.setObject(data);
+                    //txtMsg.setText("hallo vom Client" +i);
+                    try {
+                        //sender.send(txtMsg);
+                        sender.send(objMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("msg is sent" + i);
+                    System.out.println("Message successfully sent.");
+                    ++i;
+                    Thread.sleep(1000);
+                }
+            } else if(graph.getValue().toString().equals("2")){
 
-                try {
-                    //sender.send(txtMsg);
-                    sender.send(objMessage);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                for(Integer i : randomNumbers){
+                    System.out.println("i = "+i);
+                }
+                int o = 0;
+                for(Integer i : randomNumbers){
+                    int z = 0;
+                    List<Integer> hourDivider = getRandomNumbers(60, i);
+                    for(Integer a : hourDivider){
+                        System.out.println("a = "+a);
+
+                    }
+                    int min = 0;
+                    ++o;
+                    for(int i2 = 0; i2 < i; i2++){
+                        data = new MessageData((Integer) i);
+
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(timestamp); // compute start of the day for the timestamp
+                        cal.set(Calendar.HOUR_OF_DAY, o);
+                        cal.set(Calendar.MINUTE, min);
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+
+                        min+= hourDivider.get(z++);
+
+                        data.setTime(new Timestamp(cal.getTimeInMillis()));
+
+                        objMessage.setObject(data);
+                        //txtMsg.setText("hallo vom Client" +i);
+
+                        try {
+                            //sender.send(txtMsg);
+                            sender.send(objMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        System.out.println("msg is sent" + i2);
+                        System.out.println("Message successfully sent.");
+                        //++i;
+                        Thread.sleep(200);
+                    }
                 }
 
-                System.out.println("msg is sent" + i);
-                System.out.println("Message successfully sent.");
-                ++i;
-                Thread.sleep(1000);
             }
+
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+    private List<Integer> getRandomNumbers(int anzahl, int stunden){
+        List<Integer> list = new ArrayList<>();
+        int randomNumber;
+        int anzahlLeft = anzahl;
+
+
+
+        for(int i = 0; i < stunden; ++i){
+            randomNumber = (int)(Math.random()*2*anzahl / (stunden - i));
+            anzahl -= randomNumber;
+            list.add(randomNumber);
+        }
+        return list;
     }
 
     public void initialize(URL location, ResourceBundle resources) {
