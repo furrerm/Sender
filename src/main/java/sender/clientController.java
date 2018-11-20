@@ -76,11 +76,15 @@ public class clientController implements Initializable{
                 }
             } else if(graph.getValue().toString().equals("2")){
 
+                int korbstand = 20; //willkürlicher anfangsstand
+                short faktor = 1;
+
                 for(Integer i : randomNumbers){
                     System.out.println("i = "+i);
                 }
                 int o = 0;
                 for(Integer i : randomNumbers){
+                    faktor *= faktorGenerator();
                     int z = 0;
                     List<Integer> hourDivider = getRandomNumbers(60, i);
                     for(Integer a : hourDivider){
@@ -90,7 +94,18 @@ public class clientController implements Initializable{
                     int min = 0;
                     ++o;
                     for(int i2 = 0; i2 < i; i2++){
-                        data = new MessageData((Integer) i);
+                        korbstand += faktor;
+                        data = new MessageData(i);
+
+                        data.setKorbStand(korbstand);
+                        data.setKorb("Korb"+this.intGenerator(7));
+                        data.setGui(this.intGenerator(5));
+                        data.setAmbulant(this.booleanGenerator());
+                        data.setStationaer(this.booleanGenerator());
+                        data.setPartnerartObergruppe(99);
+                        data.setPlz("6005");
+                        data.setIn(this.booleanGenerator());
+                        data.setOut(this.booleanGenerator());
 
                         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -106,7 +121,7 @@ public class clientController implements Initializable{
                         data.setTime(new Timestamp(cal.getTimeInMillis()));
 
                         objMessage.setObject(data);
-                        //txtMsg.setText("hallo vom Client" +i);
+
 
                         try {
                             //sender.send(txtMsg);
@@ -141,6 +156,18 @@ public class clientController implements Initializable{
             list.add(randomNumber);
         }
         return list;
+    }
+    private byte booleanGenerator(){
+        return (byte)Math.round(Math.random());
+    }
+    private int intGenerator(int max){
+        return (int)(Math.random()*(max+1));
+    }
+    private short faktorGenerator(){
+        if(this.booleanGenerator() == 0){
+            return -1;
+        }
+        return 1;
     }
 
     public void initialize(URL location, ResourceBundle resources) {

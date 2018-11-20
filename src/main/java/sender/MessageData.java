@@ -19,6 +19,9 @@ public class MessageData implements Serializable {
     private int gui;
     private Byte ambulant;
     private Byte stationaer;
+    private Byte in;
+    private Byte out;
+
     private Integer partnerartObergruppe;
     private String plz;
     private int korbStand;
@@ -91,4 +94,19 @@ public class MessageData implements Serializable {
         this.korbStand = korbStand;
     }
 
+    public Byte getIn() {
+        return in;
+    }
+
+    public void setIn(Byte in) {
+        this.in = in;
+    }
+
+    public Byte getOut() {
+        return out;
+    }
+
+    public void setOut(Byte out) {
+        this.out = out;
+    }
 }
