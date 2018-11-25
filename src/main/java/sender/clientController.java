@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class clientController implements Initializable{
+public class clientController implements Initializable {
 
     ObservableList<Integer> listGraph = FXCollections.observableArrayList();
     ObservableList<Integer> listMenge = FXCollections.observableArrayList();
@@ -45,21 +45,32 @@ public class clientController implements Initializable{
 
     private List<Integer> randomNumbers;
 
+    private List<Integer> korbstaende;
+
     @FXML
-    private void sendMsg(ActionEvent event){
-        randomNumbers = this.getRandomNumbers(100,24);
+    private void sendMsg(ActionEvent event) {
+        randomNumbers = this.getRandomNumbers(100, 48);
+        korbstaende = new ArrayList<>();
+        korbstaende.add(10);
+        korbstaende.add(15);
+        korbstaende.add(20);
+        korbstaende.add(25);
+        korbstaende.add(30);
+        korbstaende.add(35);
+        korbstaende.add(40);
+        korbstaende.add(45);
 
         try {   //Create and start connection
 
 
             MessageData data;
 
-            if(graph.getValue().toString().equals("1")) {
+            if (graph.getValue().toString().equals("1")) {
                 int i = 0;
 
                 while (i < (Integer) menge.getValue()) {
                     //7) send message
-                    data = new MessageData((Integer) i);
+                    data = new MessageData();
 
                     objMessage.setObject(data);
                     //txtMsg.setText("hallo vom Client" +i);
@@ -74,67 +85,35 @@ public class clientController implements Initializable{
                     ++i;
                     Thread.sleep(1000);
                 }
-            } else if(graph.getValue().toString().equals("2")){
+            } else if (graph.getValue().toString().equals("2")) {
 
-                int korbstand = 20; //willkürlicher anfangsstand
-                short faktor = 1;
+                long timeStampStart = System.currentTimeMillis() - (long) (24 * 36e5);
+                long timeStampEnd = System.currentTimeMillis();
+                int anzahlMessages = 100;
 
-                for(Integer i : randomNumbers){
-                    System.out.println("i = "+i);
-                }
-                int o = 0;
-                for(Integer i : randomNumbers){
-                    faktor *= faktorGenerator();
-                    int z = 0;
-                    List<Integer> hourDivider = getRandomNumbers(60, i);
-                    for(Integer a : hourDivider){
-                        System.out.println("a = "+a);
+                for (Timestamp timestamp : this.getTimestams(timeStampStart, timeStampEnd, anzahlMessages)) {
 
+                    data = new MessageData();
+                    this.setMessageData(data);
+
+                    data.setTime(timestamp);
+
+
+                    objMessage.setObject(data);
+                    System.out.println("new Data");
+                    System.out.println(data.toString());
+
+                    try {
+                        sender.send(objMessage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    int min = 0;
-                    ++o;
-                    for(int i2 = 0; i2 < i; i2++){
-                        korbstand += faktor;
-                        data = new MessageData(i);
-
-                        data.setKorbStand(korbstand);
-                        data.setKorb("Korb"+this.intGenerator(7));
-                        data.setGui(this.intGenerator(5));
-                        data.setAmbulant(this.booleanGenerator());
-                        data.setStationaer(this.booleanGenerator());
-                        data.setPartnerartObergruppe(99);
-                        data.setPlz("6005");
-                        data.setIn(this.booleanGenerator());
-                        data.setOut(this.booleanGenerator());
-
-                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(timestamp); // compute start of the day for the timestamp
-                        cal.set(Calendar.HOUR_OF_DAY, o);
-                        cal.set(Calendar.MINUTE, min);
-                        cal.set(Calendar.SECOND, 0);
-                        cal.set(Calendar.MILLISECOND, 0);
-
-                        min+= hourDivider.get(z++);
-
-                        data.setTime(new Timestamp(cal.getTimeInMillis()));
-
-                        objMessage.setObject(data);
 
 
-                        try {
-                            //sender.send(txtMsg);
-                            sender.send(objMessage);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    System.out.println("Message successfully sent.");
 
-                        System.out.println("msg is sent" + i2);
-                        System.out.println("Message successfully sent.");
-                        //++i;
-                        Thread.sleep(200);
-                    }
+                    Thread.sleep(200);
+
                 }
 
             }
@@ -142,29 +121,91 @@ public class clientController implements Initializable{
         } catch (Exception e) {
             System.out.println(e);
         }
+
     }
-    private List<Integer> getRandomNumbers(int anzahl, int stunden){
+
+    private List<Timestamp> getTimestams(long startTime, long endTime, int anzahl) {
+
+        long stepwidth = (endTime - startTime) / anzahl;
+        long randomNumberWithinStepWidth;
+        Timestamp randomTimeStamp;
+
+        List<Timestamp> timeStamps = new ArrayList<>();
+
+        for (int i = 1; i <= anzahl; ++i) {
+            randomNumberWithinStepWidth = (long) (Math.random() * stepwidth);
+            randomTimeStamp = new Timestamp(startTime + randomNumberWithinStepWidth + (i * stepwidth));
+            System.out.println(randomTimeStamp.toString());
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(randomTimeStamp); // compute start of the day for the timestamp
+            cal.set(Calendar.HOUR_OF_DAY, randomTimeStamp.getHours());
+            cal.set(Calendar.MINUTE, randomTimeStamp.getMinutes());
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            if(cal.getTimeInMillis() > System.currentTimeMillis()){
+                break;
+            }
+
+            timeStamps.add(new Timestamp(cal.getTimeInMillis()));
+        }
+        return timeStamps;
+    }
+
+    private void setMessageData(MessageData data) {
+        int korb = this.intGenerator(7);
+
+
+        data.setKorb("Korb" + korb);
+        data.setGui(this.intGenerator(5));
+        data.setAmbulant(this.booleanGenerator());
+        data.setStationaer(this.booleanGenerator());
+        data.setPartnerartObergruppe(99);
+        data.setPlz("6005");
+        data.setIn(this.booleanGenerator());
+        data.setOut((byte) Math.abs(1 - data.getIn()));
+
+        Integer korbstandTemp = korbstaende.get(korb);
+        if (data.getIn() == 1) {
+            korbstandTemp += 1;
+        } else {
+            korbstandTemp -= 1;
+        }
+
+        korbstaende.set(korb, korbstandTemp);
+
+        data.setKorbStand(korbstaende.get(korb));
+    }
+
+    /**
+     * @param anzahl
+     * @param stunden
+     * @return List enthaelt für jede stunde die eine willkürliche int Zahl die bestimmt wieviele Messages in dieser Stunde versendet werden.
+     */
+    private List<Integer> getRandomNumbers(int anzahl, int stunden) {
         List<Integer> list = new ArrayList<>();
         int randomNumber;
         int anzahlLeft = anzahl;
 
 
-
-        for(int i = 0; i < stunden; ++i){
-            randomNumber = (int)(Math.random()*2*anzahl / (stunden - i));
+        for (int i = 0; i < stunden; ++i) {
+            randomNumber = (int) (Math.random() * 2 * anzahl / (stunden - i));
             anzahl -= randomNumber;
             list.add(randomNumber);
         }
         return list;
     }
-    private byte booleanGenerator(){
-        return (byte)Math.round(Math.random());
+
+    private byte booleanGenerator() {
+        return (byte) Math.round(Math.random());
     }
-    private int intGenerator(int max){
-        return (int)(Math.random()*(max+1));
+
+    private int intGenerator(int max) {
+        return (int) (Math.random() * (max + 1));
     }
-    private short faktorGenerator(){
-        if(this.booleanGenerator() == 0){
+
+    private short faktorGenerator() {
+        if (this.booleanGenerator() == 0) {
             return -1;
         }
         return 1;
@@ -203,24 +244,27 @@ public class clientController implements Initializable{
         } catch (Exception e) {
             System.out.println(e);
         }
-    }
-    private void loadData(){
 
-        listGraph.addAll(1,2);
+    }
+
+    private void loadData() {
+
+        listGraph.addAll(1, 2);
         graph.getItems().addAll(listGraph);
         graph.setValue(1);
 
 
-        listMenge.addAll(1,2,3,4,5,6,7,8,9);
+        listMenge.addAll(1, 2, 3, 4, 5, 6, 7, 8, 9);
         menge.getItems().addAll(listMenge);
         menge.setValue(5);
 
     }
-@FXML
+
+    @FXML
     public void closeClean(ActionEvent actionEvent) {
         try {
             con.close();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

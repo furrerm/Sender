@@ -7,10 +7,9 @@ public class MessageData implements Serializable {
 
 
 
-    public MessageData(int data) {
+    public MessageData() {
         this.time = new Timestamp(System.currentTimeMillis());
-        this.gui = data;
-        this.korb = "korb"+data;
+
 
     }
 
@@ -108,5 +107,21 @@ public class MessageData implements Serializable {
 
     public void setOut(Byte out) {
         this.out = out;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageData{" +
+                "time=" + time +
+                ", korb='" + korb + '\'' +
+                ", gui=" + gui +
+                ", ambulant=" + ambulant +
+                ", stationaer=" + stationaer +
+                ", in=" + in +
+                ", out=" + out +
+                ", partnerartObergruppe=" + partnerartObergruppe +
+                ", plz='" + plz + '\'' +
+                ", korbStand=" + korbStand +
+                '}';
     }
 }
