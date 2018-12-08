@@ -87,7 +87,7 @@ public class clientController implements Initializable {
                 }
             } else if (graph.getValue().toString().equals("2")) {
 
-                long timeStampStart = System.currentTimeMillis() - (long) (24 * 36e5);
+                long timeStampStart = System.currentTimeMillis() - (long) (13 * 36e5);
                 long timeStampEnd = System.currentTimeMillis();
                 int anzahlMessages = 100;
 
@@ -112,7 +112,7 @@ public class clientController implements Initializable {
 
                     System.out.println("Message successfully sent.");
 
-                    Thread.sleep(200);
+                    Thread.sleep(20);
 
                 }
 
