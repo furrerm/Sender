@@ -66,24 +66,20 @@ public class clientController implements Initializable {
             MessageData data;
 
             if (graph.getValue().toString().equals("1")) {
-                int i = 0;
+                data = new MessageData();
+                this.setMessageData(data);
 
-                while (i < (Integer) menge.getValue()) {
-                    //7) send message
-                    data = new MessageData();
+                data.setTime(new Timestamp(System.currentTimeMillis()));
 
-                    objMessage.setObject(data);
-                    //txtMsg.setText("hallo vom Client" +i);
-                    try {
-                        //sender.send(txtMsg);
-                        sender.send(objMessage);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("msg is sent" + i);
-                    System.out.println("Message successfully sent.");
-                    ++i;
-                    Thread.sleep(1000);
+
+                objMessage.setObject(data);
+                System.out.println("new Data");
+                System.out.println(data.toString());
+
+                try {
+                    sender.send(objMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else if (graph.getValue().toString().equals("2")) {
 
@@ -112,7 +108,7 @@ public class clientController implements Initializable {
 
                     System.out.println("Message successfully sent.");
 
-                    Thread.sleep(20);
+                    Thread.sleep(70);
 
                 }
 
