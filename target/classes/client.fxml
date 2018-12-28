@@ -2,6 +2,10 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
@@ -9,10 +13,25 @@
    <children>
       <Pane prefHeight="400.0" prefWidth="600.0">
          <children>
-            <ChoiceBox fx:id="graph" layoutX="77.0" layoutY="31.0" prefWidth="150.0" />
-            <ChoiceBox fx:id="menge" layoutX="378.0" layoutY="31.0" prefWidth="150.0" />
-            <Button layoutX="254.0" layoutY="144.0" mnemonicParsing="false" onAction="#sendMsg" text="send Message" />
-            <Button layoutX="442.0" layoutY="325.0" mnemonicParsing="false" onAction="#closeClean" text="Close Connection" />
+            <ChoiceBox fx:id="graph" layoutX="37.0" layoutY="19.0" prefWidth="150.0" />
+            <Button layoutX="321.0" layoutY="19.0" mnemonicParsing="false" onAction="#sendMsg" text="send Message" />
+            <DatePicker fx:id="datePickerVon" layoutX="25.0" layoutY="75.0" />
+            <DatePicker fx:id="datePickerBis" layoutX="300.0" layoutY="74.0" />
+            <TextField fx:id="messageCounter" layoutX="38.0" layoutY="147.0" />
+            <TextField fx:id="sleepTimer" layoutX="38.0" layoutY="218.0" />
+            <Label layoutX="29.0" layoutY="193.0" text="Wartezeit zwischen 2 Messages" />
+            <Label layoutX="67.0" layoutY="122.0" text="Anzahl Messages" />
+            <Label layoutX="29.0" layoutY="52.0" text="Von" />
+            <Label layoutX="300.0" layoutY="51.0" text="Bis" />
+            <ChoiceBox fx:id="hoursFrom" layoutX="207.0" layoutY="74.0" prefHeight="25.0" prefWidth="57.0" />
+            <ChoiceBox fx:id="hoursTo" layoutX="483.0" layoutY="75.0" prefHeight="25.0" prefWidth="57.0" />
+            <Label layoutX="236.0" layoutY="122.0" text="Koerbe" />
+            <ListView fx:id="korbAuswahl" layoutX="200.0" layoutY="143.0" prefHeight="200.0" prefWidth="150.0" />
+            <ListView fx:id="guiAuswahl" layoutX="374.0" layoutY="143.0" prefHeight="200.0" prefWidth="150.0" />
+            <Label layoutX="400.0" layoutY="122.0" text="Guis" />
+            <Button layoutX="200.0" layoutY="355.0" mnemonicParsing="false" onAction="#korbEinfuegen" text="Korb hinzufuegen" />
+            <TextField fx:id="neuerKorb" layoutX="332.0" layoutY="355.0" prefHeight="25.0" prefWidth="234.0" />
+            <Button layoutX="29.0" layoutY="355.0" mnemonicParsing="false" onAction="#sendKorbstandUpdate" text="send Korbstand Update" />
          </children>
       </Pane>
    </children>

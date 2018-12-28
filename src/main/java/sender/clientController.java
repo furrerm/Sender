@@ -1,55 +1,124 @@
 package sender;
 
+import enums.DayTime;
+import enums.Guis;
+import enums.Koerbe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.*;
 
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
 import javax.jms.*;
 import javax.naming.InitialContext;
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import enums.Randoms;
 
 public class clientController implements Initializable {
 
-    ObservableList<Integer> listGraph = FXCollections.observableArrayList();
-    ObservableList<Integer> listMenge = FXCollections.observableArrayList();
+    ObservableList<Randoms> listGraph = FXCollections.observableArrayList();
+    ObservableList<DayTime> hoursFromList = FXCollections.observableArrayList();
+    ObservableList<DayTime> hoursToList = FXCollections.observableArrayList();
+    ObservableList<Koerbe> korbAuswahlList = FXCollections.observableArrayList();
+    ObservableList<Guis> guiAuswahlList = FXCollections.observableArrayList();
+
 
     @FXML
     private ChoiceBox graph;
-
     @FXML
-    private ChoiceBox menge;
-
+    private DatePicker datePickerVon;
     @FXML
-    private Button button;
+    private DatePicker datePickerBis;
+    @FXML
+    private TextField messageCounter;
+    @FXML
+    private TextField sleepTimer;
+    @FXML
+    private ChoiceBox hoursFrom;
+    @FXML
+    private ChoiceBox hoursTo;
+    @FXML
+    private ListView korbAuswahl;
+    @FXML
+    private ListView guiAuswahl;
+    @FXML
+    private TextField neuerKorb;
+
+
+
+
 
     private ObjectMessage objMessage;
-    //private QueueSender sender;
-    //private QueueConnection con;
     private TopicPublisher sender;
     private TopicConnection con;
 
-    private TextMessage txtMsg;
-
-    private List<Integer> randomNumbers;
 
     private List<Integer> korbstaende;
+    private LocalTime getLocalTime(int hour, int minute){
+        if(hour == 24){
+            return LocalTime.of(23,59);
+        }
+        return LocalTime.of(hour,0);
+    }
+    @FXML
+    private void sendKorbstandUpdate(ActionEvent event){
+        Korbstand korbstand = new Korbstand();
+        korbstand.setGui(1);
+        korbstand.setKorb("Korb1");
+        korbstand.setTime(new Timestamp(System.currentTimeMillis()));
+        korbstand.setKorbstand(150);
+
+        try {
+            objMessage.setObject(korbstand);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+        System.out.println("new Data");
+        System.out.println(korbstand.toString());
+
+        try {
+            sender.send(objMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    private void  korbEinfuegen(ActionEvent event){
+        System.out.println("fdsgdfgdsf");
+        System.out.println(neuerKorb.getCharacters());
+
+        korbAuswahl.getItems().add(neuerKorb.getCharacters().toString());
+    }
 
     @FXML
     private void sendMsg(ActionEvent event) {
-        randomNumbers = this.getRandomNumbers(100, 48);
+
+        long sleepTimer = Long.parseLong(this.sleepTimer.getText());
+        int anzahlMessages = Integer.parseInt(this.messageCounter.getText());
+
+        LocalTime startTime = getLocalTime(((DayTime)hoursFrom.getValue()).getHour(),0);
+        LocalDateTime startDateTime = LocalDateTime.of(datePickerVon.getValue(),startTime);
+        Timestamp startDateTimeStamp = Timestamp.valueOf(startDateTime);
+
+
+        LocalTime endTime = getLocalTime(((DayTime)hoursTo.getValue()).getHour(),0);
+        LocalDateTime endDateTime = LocalDateTime.of(datePickerBis.getValue(),endTime);
+        Timestamp endDateTimeStamp = Timestamp.valueOf(endDateTime);
+
         korbstaende = new ArrayList<>();
         korbstaende.add(10);
         korbstaende.add(15);
@@ -65,11 +134,15 @@ public class clientController implements Initializable {
 
             MessageData data;
 
-            if (graph.getValue().toString().equals("1")) {
-                data = new MessageData();
+            if (graph.getValue().equals(Randoms.SINGLE)) {
+
+                UUID uuid = UUID.randomUUID();
+                String randomUUIDString = uuid.toString();
+
+                data = new MessageData(randomUUIDString);
                 this.setMessageData(data);
 
-                data.setTime(new Timestamp(System.currentTimeMillis()));
+                data.setTime(startDateTimeStamp);
 
 
                 objMessage.setObject(data);
@@ -81,19 +154,20 @@ public class clientController implements Initializable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (graph.getValue().toString().equals("2")) {
+            } else if (graph.getValue().equals(Randoms.RANDOM)) {
 
-                long timeStampStart = System.currentTimeMillis() - (long) (13 * 36e5);
-                long timeStampEnd = System.currentTimeMillis();
-                int anzahlMessages = 100;
+                long timeStampStart = startDateTimeStamp.toInstant().toEpochMilli();
+                long timeStampEnd = endDateTimeStamp.toInstant().toEpochMilli();
+
 
                 for (Timestamp timestamp : this.getTimestams(timeStampStart, timeStampEnd, anzahlMessages)) {
+                    UUID uuid = UUID.randomUUID();
+                    String randomUUIDString = uuid.toString();
 
-                    data = new MessageData();
+                    data = new MessageData(randomUUIDString);
                     this.setMessageData(data);
 
                     data.setTime(timestamp);
-
 
                     objMessage.setObject(data);
                     System.out.println("new Data");
@@ -108,7 +182,7 @@ public class clientController implements Initializable {
 
                     System.out.println("Message successfully sent.");
 
-                    Thread.sleep(70);
+                    Thread.sleep(sleepTimer);
 
                 }
 
@@ -139,7 +213,7 @@ public class clientController implements Initializable {
             cal.set(Calendar.MINUTE, randomTimeStamp.getMinutes());
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
-            if(cal.getTimeInMillis() > System.currentTimeMillis()){
+            if (cal.getTimeInMillis() > System.currentTimeMillis()) {
                 break;
             }
 
@@ -149,11 +223,16 @@ public class clientController implements Initializable {
     }
 
     private void setMessageData(MessageData data) {
-        int korb = this.intGenerator(7);
+        ObservableList<String> ausgewaehlteKoerbe = korbAuswahl.getSelectionModel().getSelectedItems();
+        int korbNumber = this.intGenerator(ausgewaehlteKoerbe.size()-1);
+
+        ObservableList<Guis> ausgewaehlteGuis = guiAuswahl.getSelectionModel().getSelectedItems();
+        int guiNumber = this.intGenerator(ausgewaehlteGuis.size()-1);
 
 
-        data.setKorb("Korb" + korb);
-        data.setGui(this.intGenerator(5));
+        data.setKorb(ausgewaehlteKoerbe.get(korbNumber).toString());
+        data.setGui(ausgewaehlteGuis.get(guiNumber).getTechnischerSchluessel());
+
         data.setAmbulant(this.booleanGenerator());
         data.setStationaer(this.booleanGenerator());
         data.setPartnerartObergruppe(99);
@@ -161,16 +240,16 @@ public class clientController implements Initializable {
         data.setIn(this.booleanGenerator());
         data.setOut((byte) Math.abs(1 - data.getIn()));
 
-        Integer korbstandTemp = korbstaende.get(korb);
+        /*Integer korbstandTemp = korbstaende.get(korbNumber);
         if (data.getIn() == 1) {
             korbstandTemp += 1;
         } else {
             korbstandTemp -= 1;
         }
-
-        korbstaende.set(korb, korbstandTemp);
-
-        data.setKorbStand(korbstaende.get(korb));
+*/
+        //korbstaende.set(korbNumber, korbstandTemp);
+//delete and rnew
+        data.setKorbStand(5);
     }
 
     /**
@@ -200,13 +279,6 @@ public class clientController implements Initializable {
         return (int) (Math.random() * (max + 1));
     }
 
-    private short faktorGenerator() {
-        if (this.booleanGenerator() == 0) {
-            return -1;
-        }
-        return 1;
-    }
-
     public void initialize(URL location, ResourceBundle resources) {
         loadData();
 
@@ -231,11 +303,10 @@ public class clientController implements Initializable {
             sender = ses.createPublisher(t);
 
             sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-            //sender.
 
 
             objMessage = ses.createObjectMessage();
-            txtMsg = ses.createTextMessage();
+
 
         } catch (Exception e) {
             System.out.println(e);
@@ -245,23 +316,34 @@ public class clientController implements Initializable {
 
     private void loadData() {
 
-        listGraph.addAll(1, 2);
+        listGraph.addAll(Randoms.values());
         graph.getItems().addAll(listGraph);
-        graph.setValue(1);
+        graph.setValue(Randoms.SINGLE);
 
+        hoursFromList.addAll(DayTime.values());
+        hoursFrom.getItems().addAll(hoursFromList);
+        hoursFrom.setValue(DayTime.ZERO);
 
-        listMenge.addAll(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        menge.getItems().addAll(listMenge);
-        menge.setValue(5);
+        hoursToList.addAll(DayTime.values());
+        hoursTo.getItems().addAll(hoursToList);
+        hoursTo.setValue(DayTime.TWELVEPM);
 
-    }
+        korbAuswahlList.addAll(Koerbe.values());
+        List<String> korbStrings = korbAuswahlList.stream().map(a -> a.toString()).collect(Collectors.toList());
+        korbAuswahl.getItems().addAll(korbStrings);
+        korbAuswahl.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        korbAuswahl.getSelectionModel().selectAll();
 
-    @FXML
-    public void closeClean(ActionEvent actionEvent) {
-        try {
-            con.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        guiAuswahlList.addAll(Guis.values());
+        guiAuswahl.getItems().addAll(guiAuswahlList);
+        guiAuswahl.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        guiAuswahl.getSelectionModel().selectAll();
+
+        datePickerVon.setValue(LocalDate.now());
+        datePickerBis.setValue(LocalDate.now());
+
+        sleepTimer.setText("100");
+        messageCounter.setText("100");
+
     }
 }

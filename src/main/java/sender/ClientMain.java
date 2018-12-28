@@ -25,7 +25,7 @@ public class ClientMain extends Application {
             e.printStackTrace();
         }
         primaryStage.setTitle("FXML Welcome");
-        primaryStage.setScene(new Scene(root, 800, 800));
+        primaryStage.setScene(new Scene(root, 600, 500));
         primaryStage.show();
 
 

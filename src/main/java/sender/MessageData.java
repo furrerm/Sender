@@ -5,14 +5,11 @@ import java.sql.Timestamp;
 
 public class MessageData implements Serializable {
 
-
-
-    public MessageData() {
+    public MessageData(String uuid) {
         this.time = new Timestamp(System.currentTimeMillis());
-
-
+        this.uuid = uuid;
     }
-
+    private String uuid;
     private Timestamp time;
     private String korb;
     private int gui;
@@ -25,6 +22,10 @@ public class MessageData implements Serializable {
     private String plz;
     private int korbStand;
 
+
+    public String getUuid() {
+        return uuid;
+    }
 
     public Timestamp getTime() {
         return time;
@@ -57,7 +58,6 @@ public class MessageData implements Serializable {
     public void setAmbulant(Byte ambulant) {
         this.ambulant = ambulant;
     }
-
 
     public Byte getStationaer() {
         return stationaer;
