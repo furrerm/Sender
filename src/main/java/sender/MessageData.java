@@ -2,6 +2,7 @@ package sender;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class MessageData implements Serializable {
 
@@ -12,6 +13,7 @@ public class MessageData implements Serializable {
     private String uuid;
     private Timestamp time;
     private String korb;
+    private int korbId;
     private int gui;
     private Byte ambulant;
     private Byte stationaer;
@@ -25,6 +27,18 @@ public class MessageData implements Serializable {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public int getKorbId() {
+        return korbId;
+    }
+
+    public void setKorbId(int korbId) {
+        this.korbId = korbId;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public Timestamp getTime() {
@@ -112,7 +126,8 @@ public class MessageData implements Serializable {
     @Override
     public String toString() {
         return "MessageData{" +
-                "time=" + time +
+                "uuid='" + uuid + '\'' +
+                ", time=" + time +
                 ", korb='" + korb + '\'' +
                 ", gui=" + gui +
                 ", ambulant=" + ambulant +
@@ -123,5 +138,29 @@ public class MessageData implements Serializable {
                 ", plz='" + plz + '\'' +
                 ", korbStand=" + korbStand +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MessageData that = (MessageData) o;
+        return gui == that.gui &&
+                korbStand == that.korbStand &&
+                Objects.equals(uuid, that.uuid) &&
+                Objects.equals(time, that.time) &&
+                Objects.equals(korb, that.korb) &&
+                Objects.equals(ambulant, that.ambulant) &&
+                Objects.equals(stationaer, that.stationaer) &&
+                Objects.equals(in, that.in) &&
+                Objects.equals(out, that.out) &&
+                Objects.equals(partnerartObergruppe, that.partnerartObergruppe) &&
+                Objects.equals(plz, that.plz);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(uuid, time, korb, gui, ambulant, stationaer, in, out, partnerartObergruppe, plz, korbStand);
     }
 }

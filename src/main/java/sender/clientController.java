@@ -98,14 +98,21 @@ public class clientController implements Initializable {
     }
     @FXML
     private void  korbEinfuegen(ActionEvent event){
-        System.out.println("fdsgdfgdsf");
-        System.out.println(neuerKorb.getCharacters());
+        if(neuerKorb.getCharacters() != null){
+            System.out.println("fdsgdfgdsf");
+            System.out.println(neuerKorb.getCharacters());
 
-        korbAuswahl.getItems().add(neuerKorb.getCharacters().toString());
+            String neuerKorbString = neuerKorb.getCharacters().toString();
+            neuerKorbString = neuerKorbString.replaceAll("\\s+","_");
+
+            korbAuswahl.getItems().add(neuerKorbString);
+        }
     }
-
+private int cou = 0;
     @FXML
     private void sendMsg(ActionEvent event) {
+
+        cou = 0;
 
         long sleepTimer = Long.parseLong(this.sleepTimer.getText());
         int anzahlMessages = Integer.parseInt(this.messageCounter.getText());
@@ -148,7 +155,7 @@ public class clientController implements Initializable {
                 objMessage.setObject(data);
                 System.out.println("new Data");
                 System.out.println(data.toString());
-
+                System.out.println("time for performanceanalysis = "+System.currentTimeMillis());
                 try {
                     sender.send(objMessage);
                 } catch (Exception e) {
@@ -172,20 +179,18 @@ public class clientController implements Initializable {
                     objMessage.setObject(data);
                     System.out.println("new Data");
                     System.out.println(data.toString());
+                    System.out.println("time for performanceanalysis = "+System.currentTimeMillis());
 
                     try {
-                        sender.send(objMessage);
+                        sender.publish(objMessage);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-
-                    System.out.println("Message successfully sent.");
-
+                    System.out.println("Message successfully sent. and counter = "+cou);
+                    cou++;
                     Thread.sleep(sleepTimer);
-
                 }
-
             }
 
         } catch (Exception e) {
@@ -214,7 +219,7 @@ public class clientController implements Initializable {
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
             if (cal.getTimeInMillis() > System.currentTimeMillis()) {
-                break;
+               cal.setTime(new Timestamp(System.currentTimeMillis()));
             }
 
             timeStamps.add(new Timestamp(cal.getTimeInMillis()));
