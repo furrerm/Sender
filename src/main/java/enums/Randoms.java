@@ -5,7 +5,9 @@ public enum Randoms {
 
 
     SINGLE(1,"Single"),
-    RANDOM(2, "Random");
+    RANDOM(2, "Random"),
+    KORBSTAND(3, "Versende neuen Korbstand");
+
     private int technischerSchluessel;
     private String fachlicherSchluessel;
 
