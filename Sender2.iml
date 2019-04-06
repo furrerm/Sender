@@ -11,9 +11,32 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.0.0" level="application_server_libraries" />
-    <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.0.0 - JMS: Java Message Service" level="application_server_libraries" />
-    <orderEntry type="library" name="gf-client" level="project" />
-    <orderEntry type="library" name="javaee" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://D:/Glassfish/glassfish-5.0/glassfish5/glassfish/lib/gf-client.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://D:/Glassfish/glassfish-5.0/glassfish5/glassfish/lib/javaee.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.jms-api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

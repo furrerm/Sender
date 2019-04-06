@@ -1,0 +1,52 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Sender2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sender2_jar</output-path>
+    <root id="archive" name="Sender2.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="Sender2" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/hk2-core.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/config-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/hk2-config.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/dol.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/glassfish-naming.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/ejb-container.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/container-common.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/ejb.security.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/security.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/deployment-common.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/lib/gf-client.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/lib/jndi-properties.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.inject.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/glassfish-corba-internal-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/lib/javaee.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.transaction-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/hk2-runlevel.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/bean-validator.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.resource-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/ssl-impl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/common-util.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/hk2-utils.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/internal-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/management-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/connectors-internal-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/orb-iiop.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/glassfish-corba-orb.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/kernel.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/gmbal.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.ejb-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/orb-connector.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/config-types.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/transaction-internal-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.servlet-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/hk2-locator.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/glassfish-corba-csiv2-idl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.jms-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/glassfish-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/hk2-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/lib/appserv-rt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/glassfish-corba-omgapi.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

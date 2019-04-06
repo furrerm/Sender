@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="fscontext">
+    <CLASSES>
+      <root url="jar://D:/Glassfish/glassfish-5.0/glassfish5/mq/lib/fscontext.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

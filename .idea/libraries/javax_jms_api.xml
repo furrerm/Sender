@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="javax.jms-api">
+    <CLASSES>
+      <root url="jar://D:/Glassfish/glassfish-5.0/glassfish5/glassfish/modules/javax.jms-api.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

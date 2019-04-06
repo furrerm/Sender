@@ -16,10 +16,10 @@ public class ClientMain extends Application {
     public void start(Stage primaryStage) {
         System.out.println("starting");
         Parent root = null;
-        System.out.println(getClass().getResource("../client.fxml").getPath());
+        System.out.println(getClass().getResource("/client.fxml").getPath());
 
         try {
-            root = FXMLLoader.load(getClass().getResource("../client.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/client.fxml"));
             //root = new FXMLLoader(getClass().getResource("Client.fxml")).load();
         } catch (Exception e){
             e.printStackTrace();

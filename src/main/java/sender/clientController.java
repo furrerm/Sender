@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -15,6 +16,8 @@ import javafx.scene.control.*;
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
 import javax.jms.*;
+import javax.jms.Queue;
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -25,6 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import enums.Randoms;
+import javafx.scene.input.MouseEvent;
 
 public class clientController implements Initializable {
 
@@ -78,8 +82,8 @@ public class clientController implements Initializable {
 
     private int measuredKorbstand = 0;
     private ObjectMessage objMessage;
-    private TopicPublisher sender;
-    private TopicConnection connection;
+    private QueueSender sender;
+    private QueueConnection connection;
 
     @FXML
     private void adjustGui(Randoms value){
@@ -236,7 +240,7 @@ public class clientController implements Initializable {
 
                     objMessage.setObject(data);
                     try {
-                        sender.publish(objMessage);
+                        sender.send(objMessage);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -301,6 +305,10 @@ public class clientController implements Initializable {
         data.setPlz("6005");
 
         byte isMessageIncoming = this.booleanGenerator();
+        System.out.println("-------------------------------------------------");
+
+        System.out.println(measuredKorbstand);
+
         if(measuredKorbstand == 0){
             isMessageIncoming = 1;
         }
@@ -309,7 +317,10 @@ public class clientController implements Initializable {
         measuredKorbstand += data.getIn();
         measuredKorbstand -= data.getOut();
 
-        data.setKorbStand(5);
+        System.out.println(measuredKorbstand);
+        System.out.println("-------------------------------------------------");
+
+        data.setKorbStand(0);
     }
 
     private byte booleanGenerator() {
@@ -324,13 +335,14 @@ public class clientController implements Initializable {
         loadData();
 
         try {
-            InitialContext ctx = new InitialContext();
-            TopicConnectionFactory f = (TopicConnectionFactory) ctx.lookup("jms/topicFactory");
-            connection = f.createTopicConnection();
+
+            Context ctx = new InitialContext();
+            QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/queueFactory");
+            connection = f.createQueueConnection();
             connection.start();
-            TopicSession ses = connection.createTopicSession(false, Session.SESSION_TRANSACTED);
-            Topic t = (Topic) ctx.lookup("Topic1");
-            sender = ses.createPublisher(t);
+            QueueSession ses = connection.createQueueSession(false, Session.SESSION_TRANSACTED);
+            Queue t = (Queue) ctx.lookup("MonitoringQueue");
+            sender = ses.createSender(t);
             sender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
             objMessage = ses.createObjectMessage();
@@ -357,12 +369,9 @@ public class clientController implements Initializable {
             adjustGui(newValue);
         });
         adjustGui(Randoms.SINGLE);
-        guiAuswahlList.addListener((ListChangeListener<Guis>) (lsit) -> {
-            this.measuredKorbstand = 0;
-        });
-        korbAuswahlList.addListener((ListChangeListener<Koerbe>) (list) -> {
-            this.measuredKorbstand = 0;
-        });
+
+        guiAuswahl.setOnMouseClicked(a -> this.measuredKorbstand = 0);
+        korbAuswahl.setOnMouseClicked(a -> this.measuredKorbstand = 0);
     }
 
     private void loadData() {
@@ -373,7 +382,7 @@ public class clientController implements Initializable {
 
         hoursFromList.addAll(DayTime.values());
         hoursFrom.getItems().addAll(hoursFromList);
-        hoursFrom.setValue(DayTime.ZERO);
+        hoursFrom.setValue(DayTime.ONEAM);
 
         hoursToList.addAll(DayTime.values());
         hoursTo.getItems().addAll(hoursToList);
