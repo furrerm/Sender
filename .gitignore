@@ -1,0 +1,60 @@
+# Directories #
+build/
+bin/
+target/
+libs/
+tmp/
+out/
+node_modules/
+jaxws/jaxws-client/src/main/
+jaxws/jaxws-endpoint/src/main/webapp/WEB-INF/wsdl/
+pictures/
+dist/
+LogHelpers/
+logs/
+nbproject/
+Videos/
+
+
+# Other Files #
+ 
+*.class
+*.log
+ 
+# Package Files #
+*.jar
+*.war
+*.ear
+*.db
+rebel.xml
+
+######################
+# Windows
+######################
+ 
+# Windows image file caches
+Thumbs.db 
+ 
+# Folder config file
+Desktop.ini
+ 
+
+######################
+# IDEA
+######################
+*.iml
+*.ipr
+*.iws
+.idea/
+atlassian-ide-plugin.xml
+.idea/workspace.xml
+
+ 
+
+
+
+######################
+# Liberty tools
+######################
+
+.factorypath
